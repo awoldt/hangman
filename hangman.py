@@ -3,6 +3,7 @@ import random
 phrases = ["apple", "cat", "blue", "red", "dolphin", "bacon", "steak", "sky", "farm", "pencil", "law"]
 censoredPhrase = "" # word with all characters replaced with * (ex: cat = ***)
 matches = 0 # number of matches users guessed character has with ramdomPhrase string
+matchesTotal = 0
 
 # index of the random phrase to be picked
 index = random.randrange(0,len(phrases))
@@ -24,6 +25,7 @@ while(solved == False):
     for i in randomPhrase:
         if(userGuess == i):
             matches += 1
+            matchesTotal += 1
     if(matches == 0):
         print("\n>>There are no " + "'" + userGuess + "'" + "s\n")
     elif(matches == 1):
@@ -43,11 +45,11 @@ while(solved == False):
         else:
             index += 1
 
+    matches = 0
+
     # if user has guessed all words correctly 
-    if(matches == len(randomPhrase)):
+    if(matchesTotal == len(randomPhrase)):
         break
 
 print("Congrats!, the word was '" + randomPhrase + "'")
 exit()
-    
-
