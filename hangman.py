@@ -1,9 +1,10 @@
 import random
 
-phrases = ["apple", "cat", "blue", "red", "dolphin", "bacon", "steak", "sky", "farm", "pencil", "law"]
+phrases = ["apple", "blue", "corn", "valley"]
 censoredPhrase = "" # word with all characters replaced with * (ex: cat = ***)
-matches = 0 # number of matches users guessed character has with ramdomPhrase string
 matchesTotal = 0
+guesses = []
+guessIndex = 0
 
 # index of the random phrase to be picked
 index = random.randrange(0,len(phrases))
@@ -13,6 +14,53 @@ randomPhrase = phrases[index]
 for i in range(0, len(randomPhrase)):
     censoredPhrase += "*"
 
+
+# function that checks if user guessed char is in randomphrase
+def checkGuess():
+    global matchesTotal
+    anyMatches = False
+    for i in randomPhrase:
+        if(guesses[guessIndex] == i):
+            print("\n>>There is a " + userGuess + "\n")
+            anyMatches = True
+            for x in randomPhrase:
+                if(guesses[guessIndex] == x):
+                    matchesTotal += 1
+            break
+        else:
+            anyMatches = False
+    
+    if(anyMatches == False):
+        print("\n>>There are no '" + userGuess + "'s\n")
+
+
+# function appends user guess to guesses list
+def appendGuess():
+    global guessIndex
+    # first guess
+    if(len(guesses) == 0):
+        guesses.append(userGuess)
+        checkGuess()
+        guessIndex += 1
+    # every guess after the first
+    else:
+        charBeenGuessed = False
+        for i in guesses:
+            # if user has already guessed this char
+            if(userGuess == i):
+                print("\n>>already guessed '" + userGuess + "'\n")
+                charBeenGuessed = True
+                break
+            else:
+                charBeenGuessed = False
+
+        if(charBeenGuessed == False):
+            guesses.append(userGuess)
+            checkGuess()
+            guessIndex += 1
+                
+
+
 print("\n")
 
 solved = False
@@ -20,19 +68,8 @@ solved = False
 while(solved == False):
     print("Word - " + censoredPhrase)
     userGuess = input("Guess: ")
-
-    #tallys the number of matches user guessed char has in phrase
-    for i in randomPhrase:
-        if(userGuess == i):
-            matches += 1
-            matchesTotal += 1
-    if(matches == 0):
-        print("\n>>There are no " + "'" + userGuess + "'" + "s\n")
-    elif(matches == 1):
-        print("\n>>There is 1 " + "'" + userGuess + "'" + "\n")
-    else:
-        print("\n>>There are " + str(matches) + " " + "'" + userGuess + "'" + "s\n")
-
+    appendGuess()
+ 
     # inserts correctly guessed chars into censoredPhrase
     index = 0
     x = list(censoredPhrase)
@@ -44,8 +81,6 @@ while(solved == False):
             index += 1
         else:
             index += 1
-
-    matches = 0
 
     # if user has guessed all words correctly 
     if(matchesTotal == len(randomPhrase)):
