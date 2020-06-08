@@ -19,13 +19,18 @@ for i in range(0, len(randomPhrase)):
 def checkGuess():
     global matchesTotal
     anyMatches = False
+    matches = 0
     for i in randomPhrase:
         if(guesses[guessIndex] == i):
-            print("\n>>There is a " + userGuess + "\n")
             anyMatches = True
             for x in randomPhrase:
                 if(guesses[guessIndex] == x):
                     matchesTotal += 1
+                    matches += 1
+            if(matches == 1):
+                print("\n>>There is 1 '" + userGuess + "'\n")
+            else:
+                print("\n>>There are " + str(matches) + " '" + userGuess + "'s\n")
             break
         else:
             anyMatches = False
@@ -59,8 +64,6 @@ def appendGuess():
             checkGuess()
             guessIndex += 1
                 
-
-
 print("\n")
 
 solved = False
@@ -86,5 +89,5 @@ while(solved == False):
     if(matchesTotal == len(randomPhrase)):
         break
 
-print("Congrats!, the word was '" + randomPhrase + "'")
+print("Congrats!, the word was '" + randomPhrase + "'\n")
 exit()
