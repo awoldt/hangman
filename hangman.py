@@ -13,8 +13,7 @@ randomPhrase = phrases[index]
 # generates the censored str
 for i in range(0, len(randomPhrase)):
     censoredPhrase += "*"
-
-
+    
 # function that checks if user guessed char is in randomphrase
 def checkGuess():
     global matchesTotal
@@ -37,7 +36,6 @@ def checkGuess():
     
     if(anyMatches == False):
         print("\n>>There are no '" + userGuess + "'s\n")
-
 
 # function appends user guess to guesses list
 def appendGuess():
