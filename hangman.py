@@ -1,10 +1,13 @@
 import random
 
+print("\n-You have 6 attempts to guess the word\n-Incorrect values will deduct attempts\n-Correct values will not decrease attempts")
+
 phrases = ["apple", "blue", "corn", "valley", "star", "dragon", "north", "opposite", "king", "mist", "envelope"]
 censoredPhrase = "" # word with all characters replaced with * (ex: cat = ***)
 matchesTotal = 0
 guesses = []
 guessIndex = 0
+guessesRemaining = 6
 
 # index of the random phrase to be picked
 index = random.randrange(0,len(phrases))
@@ -14,10 +17,10 @@ randomPhrase = phrases[index]
 for i in range(0, len(randomPhrase)):
     censoredPhrase += "*"
 
-
 # function that checks if user guessed char is in randomphrase
 def checkGuess():
     global matchesTotal
+    global guessesRemaining
     anyMatches = False
     matches = 0
     for i in randomPhrase:
@@ -28,20 +31,21 @@ def checkGuess():
                     matchesTotal += 1
                     matches += 1
             if(matches == 1):
-                print("\n>>There is 1 '" + userGuess + "'\n")
+                print("\n>>There is 1 '" + userGuess + "'\n(" + str(guessesRemaining) + " guesses left)\n")
             else:
-                print("\n>>There are " + str(matches) + " '" + userGuess + "'s\n")
+                print("\n>>There are " + str(matches) + " '" + userGuess + "'s\n(" + str(guessesRemaining) + " guesses left)\n")
             break
         else:
             anyMatches = False
     
     if(anyMatches == False):
-        print("\n>>There are no '" + userGuess + "'s\n")
-
-
+        guessesRemaining -= 1
+        print("\n>>There are no '" + userGuess + "'s\n(" + str(guessesRemaining) + " guesses left)\n")
+        
 # function appends user guess to guesses list
 def appendGuess():
     global guessIndex
+    global guessesRemaining
     # first guess
     if(len(guesses) == 0):
         guesses.append(userGuess)
@@ -53,7 +57,8 @@ def appendGuess():
         for i in guesses:
             # if user has already guessed this char
             if(userGuess == i):
-                print("\n>>already guessed '" + userGuess + "'\n")
+                guessesRemaining -= 1
+                print("\n>>Already guessed '" + userGuess + "'\n(" + str(guessesRemaining) + " guesses left)\n")
                 charBeenGuessed = True
                 break
             else:
@@ -71,13 +76,18 @@ solved = False
 while(solved == False):
     print("Word - " + censoredPhrase)
     userGuess = input("Guess: ")
-    if(len(userGuess) == 0):
-        print("\n>>>>error: must enter value\n")
-    elif(len(userGuess) > 1):
-        print("\n>>>error: enter only 1 character\n")
+    # game ends when user is out of guesses
+    if(guessesRemaining == 1):
+        print("\n0 attempts remaining, the word was '" + randomPhrase + "'\n")
+        exit()
     else:
-        appendGuess()
- 
+        if(len(userGuess) == 0):
+            print("\n>>>>error: must enter value\n")
+        elif(len(userGuess) > 1):
+            print("\n>>>error: enter only 1 character\n")
+        else:
+            appendGuess()
+
     # inserts correctly guessed chars into censoredPhrase
     index = 0
     x = list(censoredPhrase)
