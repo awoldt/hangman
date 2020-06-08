@@ -1,6 +1,6 @@
 import random
 
-phrases = ["apple", "blue", "corn", "valley"]
+phrases = ["apple", "blue", "corn", "valley", "star", "dragon", "north", "opposite", "king", "mist", "envelope"]
 censoredPhrase = "" # word with all characters replaced with * (ex: cat = ***)
 matchesTotal = 0
 guesses = []
@@ -13,7 +13,8 @@ randomPhrase = phrases[index]
 # generates the censored str
 for i in range(0, len(randomPhrase)):
     censoredPhrase += "*"
-    
+
+
 # function that checks if user guessed char is in randomphrase
 def checkGuess():
     global matchesTotal
@@ -36,6 +37,7 @@ def checkGuess():
     
     if(anyMatches == False):
         print("\n>>There are no '" + userGuess + "'s\n")
+
 
 # function appends user guess to guesses list
 def appendGuess():
@@ -69,7 +71,12 @@ solved = False
 while(solved == False):
     print("Word - " + censoredPhrase)
     userGuess = input("Guess: ")
-    appendGuess()
+    if(len(userGuess) == 0):
+        print("\n>>>>error: must enter value\n")
+    elif(len(userGuess) > 1):
+        print("\n>>>error: enter only 1 character\n")
+    else:
+        appendGuess()
  
     # inserts correctly guessed chars into censoredPhrase
     index = 0
