@@ -1,8 +1,9 @@
 import random
+from listofwords import phrases
 
 print("\n-You have 6 attempts to guess the word\n-Incorrect values will deduct attempts\n-Correct values will not decrease attempts")
 
-phrases = ["apple"]
+phrases = phrases
 censoredPhrase = "" # word with all characters replaced with * (ex: cat = ***)
 matchesTotal = 0
 guesses = []
