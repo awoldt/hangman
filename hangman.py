@@ -2,12 +2,13 @@ import random
 
 print("\n-You have 6 attempts to guess the word\n-Incorrect values will deduct attempts\n-Correct values will not decrease attempts")
 
-phrases = ["apple", "blue", "corn", "valley", "star", "dragon", "north", "opposite", "king", "mist", "envelope"]
+phrases = ["apple"]
 censoredPhrase = "" # word with all characters replaced with * (ex: cat = ***)
 matchesTotal = 0
 guesses = []
 guessIndex = 0
 guessesRemaining = 6
+integer = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 # index of the random phrase to be picked
 index = random.randrange(0,len(phrases))
@@ -74,19 +75,27 @@ print("\n")
 solved = False
 # until user can guess the word
 while(solved == False):
+    # game ends when user is out of guesses
+    if(guessesRemaining == 0):
+        print("\nno attempts remaining, the word was '" + randomPhrase + "'\n")
+        exit()
     print("Word - " + censoredPhrase)
     userGuess = input("Guess: ")
-    # game ends when user is out of guesses
-    if(guessesRemaining == 1):
-        print("\n0 attempts remaining, the word was '" + randomPhrase + "'\n")
-        exit()
+
+    # if user enters an integer, resests loop
+    if(userGuess in integer):
+        print("\n>>>error: cannot use integers\n")
+        continue
+    elif(userGuess == " "):
+        print("\n>>>error: cannot use spaces\n")
+        continue
+  
+    if(len(userGuess) == 0):
+        print("\n>>>>error: must enter value\n")
+    elif(len(userGuess) > 1):
+        print("\n>>>error: enter only 1 character\n")
     else:
-        if(len(userGuess) == 0):
-            print("\n>>>>error: must enter value\n")
-        elif(len(userGuess) > 1):
-            print("\n>>>error: enter only 1 character\n")
-        else:
-            appendGuess()
+        appendGuess()
 
     # inserts correctly guessed chars into censoredPhrase
     index = 0
