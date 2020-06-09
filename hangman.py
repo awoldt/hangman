@@ -82,14 +82,20 @@ while(solved == False):
     print("Word - " + censoredPhrase)
     userGuess = input("Guess: ")
 
-    # if user enters an integer, resests loop
+    # if user enters an integer or space, resests loop
     if(userGuess in integer):
         print("\n>>>error: cannot use integers\n")
         continue
     elif(userGuess == " "):
         print("\n>>>error: cannot use spaces\n")
         continue
-  
+    
+    # if user enters uppercase character, changes them to lowercase
+    upprCase = userGuess.isupper()
+    if(upprCase == True):
+        userGuess = userGuess.lower()
+        
+    # if user enters nothing or more than 1 character
     if(len(userGuess) == 0):
         print("\n>>>>error: must enter value\n")
     elif(len(userGuess) > 1):
@@ -115,3 +121,4 @@ while(solved == False):
 
 print("Congrats!, the word was '" + randomPhrase + "'\n")
 exit()
+
