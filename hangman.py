@@ -69,7 +69,22 @@ def appendGuess():
             guesses.append(userGuess)
             checkGuess()
             guessIndex += 1
-                
+
+# inserts correctly guessed chars into censoredPhrase               
+def changeCensoredPhrase():
+    global censoredPhrase
+    global index
+    index = 0
+    x = list(censoredPhrase)
+    for i in randomPhrase:
+        if(userGuess == i):
+            x.pop(index)
+            x.insert(index, userGuess)
+            censoredPhrase = "".join(x)
+            index += 1
+        else:
+            index += 1
+
 print("\n")
 
 solved = False
@@ -103,22 +118,13 @@ while(solved == False):
     else:
         appendGuess()
 
-    # inserts correctly guessed chars into censoredPhrase
-    index = 0
-    x = list(censoredPhrase)
-    for i in randomPhrase:
-        if(userGuess == i):
-            x.pop(index)
-            x.insert(index, userGuess)
-            censoredPhrase = "".join(x)
-            index += 1
-        else:
-            index += 1
+    changeCensoredPhrase()
 
-    # if user has guessed all words correctly 
+    # if user has guessed all words correctly, breaks loop
     if(matchesTotal == len(randomPhrase)):
         break
 
 print("Congrats!, the word was '" + randomPhrase + "'\n")
 exit()
+
 
