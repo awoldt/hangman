@@ -5,8 +5,6 @@ await newGame.Play();
 
 public class Game
 {
-    public List<char> Guesses { get; set; } = new List<char>();
-
     public async Task<string?> GenerateWord(DifficultyLevel diff)
     {
         /* 
@@ -45,12 +43,6 @@ public class Game
             var res = await req.Content.ReadAsStringAsync();
             var words = JsonSerializer.Deserialize<string[]>(res);
             var RETURN_WORD = words[0];
-
-            Guesses.Clear();
-            for (int i = 0; i < words[0].Length; i++)
-            {
-                Guesses.Add('_');
-            }
 
             return RETURN_WORD;
         }
@@ -117,6 +109,7 @@ public class Game
 
             This will loop until a player chooses not to play again
          */
+
         bool GAMEOVER = false;
 
         while (!GAMEOVER)
@@ -124,31 +117,21 @@ public class Game
             var attempts = 5;
             var diff = SelectDifficulty();
             var word = await GenerateWord(diff);
+            var guessesDisplay = new char[word.Length];
+            List<char> guesses = new List<char>();
+            // populates the default placeholder chars '_'
+            // as user spells word, placeholders will be replaced with letters
+            for (int i = 0; i < word.Length; i++)
+            {
+                guessesDisplay[i] = '_';
+            }
 
             while (attempts != 0)
             {
-                Console.WriteLine(string.Join("", Guesses));
-                Console.Write("\nGuess word: ");
-
-                var guess = Console.ReadLine().ToLower();
-                Console.Write("\n\n");
-
-                if (guess == "" || guess == null) continue;
-                if (guess.Length != word.Length)
+                // GAME WON
+                if (!guessesDisplay.Contains('_'))
                 {
-                    Console.WriteLine("error: guess must be " + word.Length + " chars\n\n");
-                    continue;
-                }
-
-                attempts--;
-
-                // CORRECT GUESS
-                if (guess == word)
-                {
-                    Console.WriteLine("\nCORRECT! The word was '" + word + "'");
-                    Console.WriteLine("-----------------------------------------------");
-                    Console.WriteLine("Attempts: " + (5 - attempts));
-
+                    Console.WriteLine("\n\nCONGRATS, YOU GUESSED THE WORD!\nThe word was " + word);
                     // play again?
                     Console.Write("\nPlay again? (y/n) ");
                     var p = Console.ReadLine().ToLower();
@@ -161,46 +144,59 @@ public class Game
                     {
                         Console.Clear();
                         GAMEOVER = true;
+                        break;
                     }
-                    break;
+                }
+
+                Console.WriteLine(string.Join("", guessesDisplay));
+                Console.Write("\nGuess character: ");
+                var guess = Console.ReadKey();
+                Console.WriteLine("\n");
+
+                if (!guesses.Contains(guess.KeyChar))
+                {
+                    guesses.Add(guess.KeyChar);
+                    // character guessed is within word to guess
+                    if (word.ToCharArray().Contains(guess.KeyChar))
+                    {
+                        for (int i = 0; i < word.Length; i++)
+                        {
+                            if (word[i] == guess.KeyChar)
+                            {
+                                guessesDisplay[i] = guess.KeyChar;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        attempts--;
+                    }
                 }
                 else
                 {
-                    for (int i = 0; i < word.Length; i++)
-                    {
-                        if (guess[i] == word[i] && Guesses[i] != guess[i])
-                        {
-                            Guesses[i] = guess[i];
-                        }
-                    }
+                    Console.WriteLine("- already guessed the character '" + guess.KeyChar + "'\n");
                 }
             }
 
-            // game over
-            if (attempts == 0)
+            // game over, could not guess word
+            Console.WriteLine("\n-----------------------------------------------");
+            Console.WriteLine("\nThe word was '" + word + "'");
+
+            // play again?
+            Console.Write("\nPlay again? (y/n) ");
+            var playAgain = Console.ReadLine().ToLower();
+            while (playAgain != "y" && playAgain != "n")
             {
-                Console.WriteLine("\n-----------------------------------------------");
-                Console.WriteLine("\nThe word was '" + word + "'");
-
-                // play again?
-                Console.Write("\nPlay again? (y/n) ");
-                var p = Console.ReadLine().ToLower();
-                while (p != "y" && p != "n")
-                {
-                    Console.Write("Play again? (y/n) ");
-                    p = Console.ReadLine().ToLower();
-                }
-                if (p == "n")
-                {
-                    Console.Clear();
-                    GAMEOVER = true;
-                }
+                Console.Write("Play again? (y/n) ");
+                playAgain = Console.ReadLine().ToLower();
             }
-
+            if (playAgain == "n")
+            {
+                Console.Clear();
+                break;
+            }
         }
     }
-
-
 }
 
 public enum DifficultyLevel
