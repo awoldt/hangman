@@ -16,6 +16,11 @@ while (true)
             Console.Write($"\n\n({5 - Guesses} tries remaining)\nGuess word: ");
 
             var UserAttempt = Console.ReadLine();
+            if (UserAttempt == "")
+            {
+                Console.Clear();
+                continue;
+            }
             Guesses++;
 
             // CORRECT GUESS!
